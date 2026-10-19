@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>סידור הילולת רבי שלמה</title>
+<meta name="description" content="תהלים ותפילת מנחה להילולת רבי שלמה קרליבך, עם שירי רבי שלמה – עובד גם בלי אינטרנט">
+<meta name="theme-color" content="#551b53">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="סידור שלמה">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/FrankRuehlCLM-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="bar" id="bar">
+  <button class="icon-btn" id="btn-menu" aria-label="תוכן העניינים" hidden>
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+  </button>
+  <button class="icon-btn" id="btn-home" aria-label="מסך הבית" hidden>
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="bar-title">
+    <div class="bar-book" id="bar-book">סידור הילולת רבי שלמה</div>
+    <div class="bar-sec" id="bar-sec"></div>
+  </div>
+  <button class="icon-btn" id="btn-settings" aria-label="הגדרות תצוגה">
+    <span class="aa">א<small>א</small></span>
+  </button>
+</header>
+
+<main id="main"></main>
+
+<!-- table of contents drawer -->
+<div class="scrim" id="scrim" hidden></div>
+<nav class="drawer" id="drawer" aria-label="תוכן העניינים" hidden>
+  <div class="drawer-head">
+    <span id="drawer-title">תוכן העניינים</span>
+    <button class="icon-btn" id="drawer-close" aria-label="סגירה">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</nav>
+
+<!-- settings sheet -->
+<section class="sheet" id="settings" hidden aria-label="הגדרות">
+  <div class="sheet-grip"></div>
+  <h3>הגדרות תצוגה</h3>
+  <label class="row">
+    <span>גודל אותיות</span>
+    <span class="size-ctl">
+      <button class="pill" id="fs-down" aria-label="הקטנה">א־</button>
+      <input type="range" id="fs" min="16" max="40" step="1">
+      <button class="pill" id="fs-up" aria-label="הגדלה">א+</button>
+    </span>
+  </label>
+  <div class="preview" id="fs-preview">אַשְׁרֵי יוֹשְׁבֵי בֵיתֶךָ</div>
+  <div class="row">
+    <span>מצב תצוגה</span>
+    <span class="seg" id="theme-seg">
+      <button data-theme="light">בהיר</button>
+      <button data-theme="auto">אוטומטי</button>
+      <button data-theme="dark">כהה</button>
+    </span>
+  </div>
+  <label class="row" id="wake-row">
+    <span>השאר את המסך דולק</span>
+    <input type="checkbox" id="wake" class="switch">
+  </label>
+  <button class="close-wide" data-close>סגירה</button>
+</section>
+
+<!-- song sheet -->
+<section class="sheet" id="songsheet" hidden aria-label="שיר"></section>
+
+<div class="toast" id="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
