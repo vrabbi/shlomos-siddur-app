@@ -1,4 +1,4 @@
-/* סידור הילולת רבי שלמה – offline PWA */
+/* סידור יארצייט של רב שלמה קרליבך זצוק״ל – offline PWA */
 (() => {
 'use strict';
 
@@ -15,12 +15,12 @@ const store = {
 // prayer and psalm text is always Hebrew; only the interface, titles and instructions switch
 const STR = {
   he: {
-    appTitle: 'סידור הילולת רבי שלמה', contents: 'תוכן העניינים', home: 'מסך הבית', close: 'סגירה',
+    appTitle: 'סידור יארצייט של רב שלמה קרליבך זצוק״ל', contents: 'תוכן העניינים', home: 'מסך הבית', close: 'סגירה',
     settings: 'הגדרות תצוגה', settingsShort: 'הגדרות', aa: 'א<small>א</small>', fontSize: 'גודל אותיות',
     smaller: 'הקטנה', larger: 'הגדלה', fsDown: 'א־', fsUp: 'א+', theme: 'מצב תצוגה',
     light: 'בהיר', auto: 'אוטומטי', dark: 'כהה', wake: 'השאר את המסך דולק', song: 'שיר',
     toDark: 'מעבר למצב כהה', toLight: 'מעבר למצב בהיר', langBtn: 'EN', langAria: 'Switch to English',
-    heroOver: 'הַבּוֹחֵר בְּשִׁירֵי זִמְרָה', heroTitle: 'סידור הילולת<br>רבי שלמה קרליבך',
+    heroOver: 'הַבּוֹחֵר בְּשִׁירֵי זִמְרָה', heroTitle: 'סידור יארצייט של<br>רב שלמה קרליבך זצוק״ל',
     heroSub: 'תהלים · תפילת מנחה · שירי רבי שלמה',
     cardTehillim: 'שבעה מזמורים · קי״ט באותיות שלמה ונשמה · הזכרת נשמות',
     cardMincha: 'אשרי · קדיש · שמונה עשרה עם השירים · עלינו',
@@ -44,12 +44,12 @@ const STR = {
     transCredit: ''
   },
   en: {
-    appTitle: 'Reb Shlomo\'s Hilula Siddur', contents: 'Contents', home: 'Home', close: 'Close',
+    appTitle: 'Reb Shlomo Carlebach zt"l Yahrzeit Siddur', contents: 'Contents', home: 'Home', close: 'Close',
     settings: 'Display settings', settingsShort: 'Settings', aa: 'A<small>a</small>', fontSize: 'Text size',
     smaller: 'Smaller', larger: 'Larger', fsDown: 'A−', fsUp: 'A+', theme: 'Theme',
     light: 'Light', auto: 'Auto', dark: 'Dark', wake: 'Keep the screen on', song: 'Song',
     toDark: 'Switch to dark mode', toLight: 'Switch to light mode', langBtn: 'עב', langAria: 'מעבר לעברית',
-    heroOver: 'Who chooses songs of praise', heroTitle: 'The Hilula Siddur of Reb Shlomo Carlebach',
+    heroOver: 'Who chooses songs of praise', heroTitle: 'The Yahrzeit Siddur of Reb Shlomo Carlebach zt"l',
     heroSub: 'Tehillim · Mincha · Reb Shlomo\'s songs',
     cardTehillim: 'Seven psalms · Psalm 119 in the letters of Shlomo and Neshama · Memorial prayer',
     cardMincha: 'Ashrei · Kaddish · Shemoneh Esrei with the songs · Aleinu',
