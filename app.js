@@ -44,12 +44,12 @@ const STR = {
     transCredit: ''
   },
   en: {
-    appTitle: 'Reb Shlomo Carlebach zt"l Yahrzeit Siddur', contents: 'Contents', home: 'Home', close: 'Close',
+    appTitle: 'The Reb Shlomo Carlebach zt"l Yahrzeit Siddur', contents: 'Contents', home: 'Home', close: 'Close',
     settings: 'Display settings', settingsShort: 'Settings', aa: 'A<small>a</small>', fontSize: 'Text size',
     smaller: 'Smaller', larger: 'Larger', fsDown: 'A−', fsUp: 'A+', theme: 'Theme',
     light: 'Light', auto: 'Auto', dark: 'Dark', wake: 'Keep the screen on', song: 'Song',
     toDark: 'Switch to dark mode', toLight: 'Switch to light mode', langBtn: 'עב', langAria: 'מעבר לעברית',
-    heroOver: 'Who chooses songs of praise', heroTitle: 'The Yahrzeit Siddur of Reb Shlomo Carlebach zt"l',
+    heroOver: 'Who chooses songs of praise', heroTitle: 'The Reb Shlomo Carlebach zt"l Yahrzeit Siddur',
     heroSub: 'Tehillim · Mincha · Reb Shlomo\'s songs',
     cardTehillim: 'Seven psalms · Psalm 119 in the letters of Shlomo and Neshama · Memorial prayer',
     cardMincha: 'Ashrei · Kaddish · Shemoneh Esrei with the songs · Aleinu',
