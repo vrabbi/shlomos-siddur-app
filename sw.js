@@ -1,5 +1,5 @@
 /* offline cache for סידור הילולת רבי שלמה – bump VERSION on every content/app change */
-const VERSION = 'siddur-v1';
+const VERSION = 'siddur-v2';
 const FILES = [
   './', 'index.html', 'app.css', 'app.js', 'content.json', 'manifest.webmanifest',
   'fonts/FrankRuehlCLM-Medium.woff2', 'fonts/FrankRuehlCLM-Bold.woff2',

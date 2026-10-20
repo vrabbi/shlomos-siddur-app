@@ -31,6 +31,9 @@ function applyTheme(t) {
   store.set('theme', t);
   const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   $('meta[name="theme-color"]').setAttribute('content', dark ? '#2a1428' : '#551b53');
+  const btn = $('#btn-theme');
+  btn.classList.toggle('is-dark', dark);
+  btn.setAttribute('aria-label', dark ? 'מעבר למצב בהיר' : 'מעבר למצב כהה');
 }
 let wakeLock = null;
 async function setWake(on) {
@@ -380,6 +383,7 @@ function bind() {
   $('#fs-down').onclick = () => applyFont(+$('#fs').value - 1);
   $('#fs-up').onclick = () => applyFont(+$('#fs').value + 1);
   $$('#theme-seg button').forEach(b => b.onclick = () => applyTheme(b.dataset.theme));
+  $('#btn-theme').onclick = e => applyTheme(e.currentTarget.classList.contains('is-dark') ? 'light' : 'dark');
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => applyTheme(store.get('theme', 'auto')));
   if (!('wakeLock' in navigator)) $('#wake-row').hidden = true;
   $('#wake').checked = store.get('wake', false);
