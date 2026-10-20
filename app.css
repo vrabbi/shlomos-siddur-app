@@ -23,7 +23,7 @@
 }
 
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(64px + var(--safe-t))}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--bar-h,calc(56px + var(--safe-t))) + 8px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Frank Ruehl CLM","David","Times New Roman",serif;
   -webkit-tap-highlight-color:transparent;min-height:100vh;overflow-x:hidden}
 :root[lang="en"] body{font-family:Georgia,"Frank Ruehl CLM","Times New Roman",serif}
@@ -37,7 +37,7 @@ button{font:inherit;color:inherit}
 :root[data-theme="dark"] .bar{background:#2a1428}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bar{background:#2a1428}}
 .bar-title{flex:1;min-width:0;text-align:center;line-height:1.15}
-.bar-book{font-weight:700;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-book{font-weight:700;font-size:18px;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
 .bar-sec{font-size:14px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:16px}
 .icon-btn{background:none;border:0;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;cursor:pointer;flex:none}
 .icon-btn:active{background:rgba(255,255,255,.14)}
@@ -70,7 +70,7 @@ main{max-width:760px;margin:0 auto;padding:0 18px calc(80px + var(--safe-b))}
 .foot{margin:28px 0 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
 
 /* quick nav chips */
-.quick{position:sticky;top:calc(56px + var(--safe-t));z-index:10;margin:0 -18px;padding:8px 14px;background:color-mix(in srgb,var(--bg) 92%,transparent);
+.quick{position:sticky;top:var(--bar-h,calc(56px + var(--safe-t)));z-index:10;margin:0 -18px;padding:8px 14px;background:color-mix(in srgb,var(--bg) 92%,transparent);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .quick::-webkit-scrollbar{display:none}
 .chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 13px;font-size:16px;cursor:pointer;white-space:nowrap}

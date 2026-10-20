@@ -524,6 +524,9 @@ function bind() {
 applyFont(store.get('fs', Math.round(Math.min(24, Math.max(19, window.innerWidth / 19)))));
 applyLang(LANG);
 $('#btn-lang').onclick = switchLang;
+// the title may wrap to two lines, so sticky elements below the bar follow its real height
+const syncBarHeight = () => root.style.setProperty('--bar-h', $('#bar').offsetHeight + 'px');
+if ('ResizeObserver' in window) new ResizeObserver(syncBarHeight).observe($('#bar')); else syncBarHeight();
 fetch('content.json').then(r => r.json()).then(d => {
   DATA = d; for (const b of d.books) BOOKS[b.id] = b;
   bind(); route();

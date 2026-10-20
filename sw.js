@@ -1,5 +1,5 @@
 /* offline cache for סידור יארצייט של רב שלמה קרליבך זצוק״ל – bump VERSION on every content/app change */
-const VERSION = 'siddur-v6';
+const VERSION = 'siddur-v7';
 const FILES = [
   './', 'index.html', 'app.css', 'app.js', 'content.json', 'manifest.webmanifest',
   'fonts/FrankRuehlCLM-Medium.woff2', 'fonts/FrankRuehlCLM-Bold.woff2',
