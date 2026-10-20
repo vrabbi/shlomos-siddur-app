@@ -115,6 +115,14 @@ main{max-width:760px;margin:0 auto;padding:0 18px calc(80px + var(--safe-b))}
 .key{display:inline-block;direction:ltr;font-family:Georgia,"Times New Roman",serif;font-size:14px;font-weight:700;color:var(--plum);
   border:1px solid var(--line);border-radius:8px;padding:1px 8px;background:var(--bg)}
 .songs-list .where{color:var(--muted);font-size:15px;margin-top:2px}
+.aliyot h3{color:var(--plum)}
+.aliyot .nth{color:var(--muted);font-size:15px;font-weight:400;margin-inline-start:auto}
+.vid{display:flex;align-items:center;gap:12px;padding:10px 2px;border-top:1px solid var(--line);color:var(--ink);text-decoration:none}
+.aliyot h3+.vid{margin-top:8px}
+.vid svg{flex:none;width:26px;height:26px;color:#c4302b}
+.vid b{display:block;font-size:18px;font-weight:400}
+.vid small{display:block;color:var(--muted);font-size:14px}
+.vid:active{background:var(--bg2)}
 .songs-list .words{font-size:18px;line-height:1.7;margin:8px 0}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:10px 16px;font-size:17px;cursor:pointer;text-decoration:none}

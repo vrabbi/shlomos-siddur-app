@@ -177,6 +177,7 @@ function viewHome() {
       <a class="card" href="#/tehillim"><span class="ic">ת</span><span><h2>תהלים</h2><p>שבעה מזמורים · קי״ט באותיות שלמה ונשמה · הזכרת נשמות</p></span></a>
       <a class="card" href="#/mincha"><span class="ic">מ</span><span><h2>תפילת מנחה</h2><p>אשרי · קדיש · שמונה עשרה עם השירים · עלינו</p></span></a>
       <a class="card" href="#/songs"><span class="ic">♪</span><span><h2>השירים</h2><p>${Object.keys(DATA.songs).length} שירים של רבי שלמה, עם הסולם וקישור להאזנה</p></span></a>
+      <a class="card" href="#/aliyot"><span class="ic">ע</span><span><h2>עליות לקבר</h2><p>סרטונים מהעלייה לקבר בשנים קודמות, מתשס״ח ועד היום</p></span></a>
     </div>
     ${lastLabel ? `<button class="resume" id="resume">להמשיך מהמקום האחרון: ${esc(lastLabel)}</button>` : ''}
     <div class="install" id="install" hidden></div>
@@ -213,6 +214,21 @@ function viewSongs() {
         <p class="words">${esc(s.words)}</p>
         <div class="actions">${ytButton(s)}${w ? `<a class="btn ghost" href="#/${w.book}/${w.id}">למקום בתפילה</a>` : ''}</div></li>`;
     }).join('')}</ul>`;
+  window.scrollTo(0, 0);
+}
+function viewAliyot() {
+  current = { book: null, id: null };
+  $('#btn-menu').hidden = false; $('#btn-home').hidden = false;
+  setBar('עליות לקבר', 'משנים קודמות');
+  const count = DATA.aliyot.reduce((n, y) => n + y.videos.length, 0);
+  $('#main').innerHTML = `<h1 class="book-title">עליות לקבר</h1>
+    <p class="book-intro">${count} סרטונים מהעלייה לקברו של רבי שלמה בהר המנוחות, לפי שנים</p>
+    ${navigator.onLine ? '' : '<p class="offline">אין כרגע חיבור לאינטרנט – כדי לצפות בסרטונים צריך חיבור.</p>'}
+    <ul class="songs-list aliyot">${DATA.aliyot.map(y => `<li>
+      <h3>${esc(y.heb)} <span class="key">${y.greg}</span><span class="nth">היארצייט ה־${y.n}</span></h3>
+      ${y.videos.map(v => `<a class="vid" href="https://youtu.be/${encodeURIComponent(v.yt)}${v.t ? `?t=${v.t}` : ''}" target="_blank" rel="noopener">${ICON_PLAY}
+        <span><b>${esc(v.title)}</b><small><bdi>${esc(v.by)}</bdi>${v.min ? ` · ${v.min} דק׳` : ''}</small></span></a>`).join('')}
+    </li>`).join('')}</ul>`;
   window.scrollTo(0, 0);
 }
 function songLocations() {
@@ -298,7 +314,7 @@ function openDrawer() {
       } else h += `<a href="#/${book.id}/${s.id}" class="${current.id === s.id ? 'on' : ''}">${esc(s.title)}</a>`;
     }
   });
-  h += '<hr><a href="#/songs">♪ כל השירים</a><a href="#/">מסך הבית</a></div>';
+  h += '<hr><a href="#/songs">♪ כל השירים</a><a href="#/aliyot">עליות לקבר משנים קודמות</a><a href="#/">מסך הבית</a></div>';
   $('#drawer-body').innerHTML = h;
   $('#drawer').hidden = false; $('#scrim').hidden = false;
   const on = $('#drawer-body a.on'); if (on) on.scrollIntoView({ block: 'center' });
@@ -351,6 +367,7 @@ function route() {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   if (!parts.length) return viewHome();
   if (parts[0] === 'songs') return viewSongs();
+  if (parts[0] === 'aliyot') return viewAliyot();
   if (BOOKS[parts[0]]) return viewBook(parts[0], parts[1]);
   viewHome();
 }
