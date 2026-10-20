@@ -10,6 +10,75 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem('siddur.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem('siddur.' + k, JSON.stringify(v)); } catch (e) {} }
 };
+
+/* ---------- language ---------- */
+// prayer and psalm text is always Hebrew; only the interface, titles and instructions switch
+const STR = {
+  he: {
+    appTitle: 'סידור הילולת רבי שלמה', contents: 'תוכן העניינים', home: 'מסך הבית', close: 'סגירה',
+    settings: 'הגדרות תצוגה', settingsShort: 'הגדרות', aa: 'א<small>א</small>', fontSize: 'גודל אותיות',
+    smaller: 'הקטנה', larger: 'הגדלה', fsDown: 'א־', fsUp: 'א+', theme: 'מצב תצוגה',
+    light: 'בהיר', auto: 'אוטומטי', dark: 'כהה', wake: 'השאר את המסך דולק', song: 'שיר',
+    toDark: 'מעבר למצב כהה', toLight: 'מעבר למצב בהיר', langBtn: 'EN', langAria: 'Switch to English',
+    heroOver: 'הַבּוֹחֵר בְּשִׁירֵי זִמְרָה', heroTitle: 'סידור הילולת<br>רבי שלמה קרליבך',
+    heroSub: 'תהלים · תפילת מנחה · שירי רבי שלמה',
+    cardTehillim: 'שבעה מזמורים · קי״ט באותיות שלמה ונשמה · הזכרת נשמות',
+    cardMincha: 'אשרי · קדיש · שמונה עשרה עם השירים · עלינו',
+    songsTitle: 'השירים', cardSongs: n => `${n} שירים של רבי שלמה, עם הסולם וקישור להאזנה`,
+    aliyotTitle: 'עליות לקבר משנים קודמות', cardAliyot: 'סרטונים מהעלייה לקבר בשנים קודמות, מתשס״ח ועד היום',
+    resume: 'להמשיך מהמקום האחרון: ',
+    foot: 'הקטעים המסומנים בכחול הם שירי רבי שלמה – הקישו עליהם כדי לשמוע.<br>הסידור עובד גם בלי חיבור לאינטרנט.',
+    songsBar: 'שירי רבי שלמה בתפילה', songsH1: 'שירי רבי שלמה', songsIntro: 'לפי סדר התפילה', toPrayer: 'למקום בתפילה',
+    listenYt: 'האזנה ביוטיוב', listen: 'האזנה: ', songAria: 'שיר: ',
+    songOffline: 'אין כרגע חיבור לאינטרנט – כדי לשמוע את השיר צריך חיבור.',
+    aliyotBar: 'עליות לקבר', aliyotBarSub: 'משנים קודמות',
+    aliyotIntro: n => `${n} סרטונים מהעלייה לקברו של רבי שלמה בהר המנוחות, לפי שנים`,
+    aliyotOffline: 'אין כרגע חיבור לאינטרנט – כדי לצפות בסרטונים צריך חיבור.',
+    yearHead: y => `${esc(y.heb)} <span class="key">${y.greg}</span><span class="nth">היארצייט ה־${y.n}</span>`,
+    minutes: m => `${m} דק׳`, allSongs: '♪ כל השירים', aliyotLink: 'עליות לקבר משנים קודמות',
+    installAndroid: 'אפשר להתקין את הסידור כאפליקציה בטלפון, והוא יעבוד גם בלי אינטרנט.', install: 'התקנה',
+    installIos: 'להתקנה באייפון: בספארי הקישו על כפתור השיתוף <b>⎋</b> ובחרו <b>„הוסף למסך הבית”</b>. אחרי ההתקנה הסידור עובד גם בלי אינטרנט.',
+    online: 'יש חיבור לאינטרנט', offline: 'אין חיבור – הסידור ממשיך לעבוד, השירים יחכו לחיבור',
+    loadError: 'לא הצלחנו לטעון את הסידור. נסו לרענן.',
+    updated: 'גרסה חדשה של הסידור הותקנה – היא תיטען בפתיחה הבאה', saved: 'הסידור נשמר במכשיר ויעבוד גם בלי אינטרנט',
+    transCredit: ''
+  },
+  en: {
+    appTitle: 'Reb Shlomo\'s Hilula Siddur', contents: 'Contents', home: 'Home', close: 'Close',
+    settings: 'Display settings', settingsShort: 'Settings', aa: 'A<small>a</small>', fontSize: 'Text size',
+    smaller: 'Smaller', larger: 'Larger', fsDown: 'A−', fsUp: 'A+', theme: 'Theme',
+    light: 'Light', auto: 'Auto', dark: 'Dark', wake: 'Keep the screen on', song: 'Song',
+    toDark: 'Switch to dark mode', toLight: 'Switch to light mode', langBtn: 'עב', langAria: 'מעבר לעברית',
+    heroOver: 'Who chooses songs of praise', heroTitle: 'The Hilula Siddur of Reb Shlomo Carlebach',
+    heroSub: 'Tehillim · Mincha · Reb Shlomo\'s songs',
+    cardTehillim: 'Seven psalms · Psalm 119 in the letters of Shlomo and Neshama · Memorial prayer',
+    cardMincha: 'Ashrei · Kaddish · Shemoneh Esrei with the songs · Aleinu',
+    songsTitle: 'The Songs', cardSongs: n => `${n} of Reb Shlomo's songs, with the key and a link to listen`,
+    aliyotTitle: 'Aliyot Lakever from Previous Years', cardAliyot: 'Videos from the aliyah lakever in past years, from 5768 (2007) until today',
+    resume: 'Continue where you left off: ',
+    foot: 'Passages marked in blue are Reb Shlomo\'s songs – tap them to listen.<br>The siddur works without an internet connection.',
+    songsBar: 'Reb Shlomo\'s songs in the prayers', songsH1: 'Reb Shlomo\'s Songs', songsIntro: 'In the order of the prayers', toPrayer: 'Go to the prayer',
+    listenYt: 'Listen on YouTube', listen: 'Listen: ', songAria: 'Song: ',
+    songOffline: 'There is no internet connection right now – listening to the song needs a connection.',
+    aliyotBar: 'Aliyot Lakever', aliyotBarSub: 'from previous years',
+    aliyotIntro: n => `${n} videos from the aliyah lakever at Reb Shlomo's grave on Har HaMenuchot, by year`,
+    aliyotOffline: 'There is no internet connection right now – watching the videos needs a connection.',
+    yearHead: y => `${y.greg + 3761} <span class="key">${y.greg}</span><span class="nth">${ordinal(y.n)} yahrzeit</span>`,
+    minutes: m => `${m} min`, allSongs: '♪ All the songs', aliyotLink: 'Aliyot lakever from previous years',
+    installAndroid: 'You can install the siddur as an app on your phone, and it will work without internet.', install: 'Install',
+    installIos: 'To install on iPhone: in Safari, tap the Share button <b>⎋</b> and choose <b>“Add to Home Screen”</b>. Once installed, the siddur works without internet.',
+    online: 'Back online', offline: 'No connection – the siddur keeps working; the songs will wait for a connection',
+    loadError: 'We couldn\'t load the siddur. Please try refreshing.',
+    updated: 'A new version of the siddur was installed – it will load the next time you open it', saved: 'The siddur is saved on your device and works offline',
+    transCredit: 'English translation of the psalms: JPS 1917 (public domain)'
+  }
+};
+let LANG = store.get('lang', 'he') === 'en' ? 'en' : 'he';
+const tr = k => STR[LANG][k];
+const L = (o, k = 'title') => (LANG === 'en' && o[k + 'En']) || o[k];
+const ordinal = n => n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th'));
+const HE = 'dir="rtl" lang="he"';
+
 const ICON_NOTE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 18.5a3 3 0 1 1-2-2.83V5l12-2v12.5a3 3 0 1 1-2-2.83V7.1l-8 1.34z"/></svg>';
 const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 4.8 12 4.8 12 4.8s-6 0-7.7.5a2.7 2.7 0 0 0-1.9 1.9C2 8.9 2 12 2 12s0 3.1.4 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 7.7.5 7.7.5s6 0 7.7-.5a2.7 2.7 0 0 0 1.9-1.9c.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8zM10 15.1V8.9l5.2 3.1z"/></svg>';
 
@@ -33,7 +102,22 @@ function applyTheme(t) {
   $('meta[name="theme-color"]').setAttribute('content', dark ? '#2a1428' : '#551b53');
   const btn = $('#btn-theme');
   btn.classList.toggle('is-dark', dark);
-  btn.setAttribute('aria-label', dark ? 'מעבר למצב בהיר' : 'מעבר למצב כהה');
+  btn.setAttribute('aria-label', tr(dark ? 'toLight' : 'toDark'));
+}
+function applyLang(lang) {
+  LANG = lang; store.set('lang', lang);
+  root.lang = lang; root.dir = lang === 'en' ? 'ltr' : 'rtl';
+  document.title = tr('appTitle');
+  $$('[data-i18n]').forEach(el => { el.innerHTML = tr(el.dataset.i18n); });
+  $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', tr(el.dataset.i18nAria)));
+  applyTheme(store.get('theme', 'auto'));
+}
+function switchLang() {
+  applyLang(LANG === 'en' ? 'he' : 'en');
+  if (!DATA) return;
+  const { book, id } = current;
+  closeAll();
+  if (book) { current.book = null; viewBook(book, id); } else route();
 }
 let wakeLock = null;
 async function setWake(on) {
@@ -78,10 +162,10 @@ function runsHTML(runs, verse) {
         inner += runHTML(x, verse); j++;
       }
       if (songs.length) {
-        const label = songs.map(s => DATA.songs[s].title).join(', ');
+        const label = songs.map(s => L(DATA.songs[s])).join(', ');
         const lead = inner.match(/^\s*/)[0], trail = inner.match(/\s*$/)[0];
-        html += lead + `<span class="song" data-songs="${songs.join(',')}" role="button" tabindex="0" aria-label="שיר: ${esc(label)}">${inner.trim()}</span>` +
-          `<button class="note-btn" data-songs="${songs.join(',')}" aria-label="האזנה: ${esc(label)}">${ICON_NOTE}${songs.length > 1 ? songs.length : ''}</button>` + trail;
+        html += lead + `<span class="song" data-songs="${songs.join(',')}" role="button" tabindex="0" aria-label="${tr('songAria')}${esc(label)}">${inner.trim()}</span>` +
+          `<button class="note-btn" data-songs="${songs.join(',')}" aria-label="${tr('listen')}${esc(label)}">${ICON_NOTE}${songs.length > 1 ? songs.length : ''}</button>` + trail;
       } else html += `<span class="blue">${inner}</span>`;
       i = j; continue;
     }
@@ -90,40 +174,63 @@ function runsHTML(runs, verse) {
   return html;
 }
 function runHTML(r, verse) {
-  const t = esc(r.t);
+  const en = LANG === 'en' && r.en;
+  let t = esc(en || r.t);
+  if (en) t = t.replace(/^(\s*)(.*?)(\s*)$/s, '$1<bdi dir="ltr" lang="en">$2</bdi>$3');
   if (r.c === 'big') return `<span class="big">${t}</span>`;
   if (r.c === 'init') return `<span class="init">${t}</span>`;
   if (r.c === 'small') return `<span class="small">${t}</span>`;
   return t;
 }
-function parasHTML(paras, verses) {
-  return paras.map(p => {
-    if (verses) return `<p class="verse">${runsHTML(p.runs, true)}</p>`;
-    return `<p class="txt${p.small ? ' small' : ''}">${runsHTML(p.runs)}</p>`;
+function parasHTML(paras, verses, trans, from = 1) {
+  return paras.map((p, i) => {
+    if (verses) return pairHTML(`<p class="verse" ${HE}>${runsHTML(p.runs, true)}</p>`, trans && trans[i], from + i);
+    if (trans) return splitVerses(p.runs).map((v, j) => pairHTML(`<p class="verse" ${HE}>${runsHTML(v, true)}</p>`, trans[j], j + 1)).join('');
+    return `<p class="txt${p.small ? ' small' : ''}" ${HE}>${runsHTML(p.runs)}</p>`;
   }).join('');
 }
-const shortTitle = t => t.replace(/^פרק\s+/, '');
+// a verse with its translation next to it; outside English mode the Hebrew stands alone
+function pairHTML(he, en, n) {
+  if (LANG !== 'en' || !en) return he;
+  return `<div class="pair">${he}<p class="tr" lang="en"><sup>${n}</sup>${esc(en)}</p></div>`;
+}
+// psalms are stored as one paragraph; verses end with a sof pasuk (:)
+function splitVerses(runs) {
+  const out = [];
+  let cur = null, brk = true;
+  for (const r of runs) for (const part of r.t.split(/(?<=:)/)) {
+    if (!part) continue;
+    if (brk) { cur = []; out.push(cur); brk = false; }
+    cur.push({ ...r, t: cur.length ? part : part.replace(/^\s+/, '') });
+    if (part.endsWith(':')) brk = true;
+  }
+  return out.filter(v => v.some(r => r.t.trim()));
+}
+const shortTitle = t => t.replace(/^(פרק|Psalm)\s+/, '');
 
 function renderBook(bookId) {
   const book = BOOKS[bookId];
   let h = '';
   // quick nav
   h += `<div class="quick" id="quick">${quickChips(bookId)}</div>`;
-  h += `<h1 class="book-title">${esc(book.title)}</h1>`;
-  if (book.intro) h += `<p class="book-intro">${esc(book.intro)}</p>`;
+  h += `<h1 class="book-title">${esc(L(book))}</h1>`;
+  if (L(book, 'intro')) h += `<p class="book-intro">${esc(L(book, 'intro'))}</p>`;
+  if (LANG === 'en' && book.sections.some(s => s.trans || s.letters)) h += `<p class="book-intro credit">${tr('transCredit')}</p>`;
+  const trans = o => LANG === 'en' ? o.trans : null;
   for (const s of book.sections) {
+    const st = esc(L(s));
     if (s.letters) {
-      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${esc(s.title)}"><div class="grp-h">${esc(s.title)}</div>`;
+      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${st}"><div class="grp-h">${st}</div>`;
       for (const l of s.letters)
-        h += `<div class="anchor" id="sec-${l.id}" data-title="${esc(s.title)} · ${esc(l.title)}"><div class="letter-h"><b>${esc(l.title)}</b><span>${esc(s.group)}</span></div>${parasHTML(l.paras, true)}</div>`;
+        h += `<div class="anchor" id="sec-${l.id}" data-title="${st} · ${esc(l.title)}"><div class="letter-h"><b lang="he">${esc(l.title)}</b><span>${esc(L(s, 'group'))}</span></div>${parasHTML(l.paras, true, trans(l), l.transFrom)}</div>`;
       h += `</section>`;
     } else if (s.subs) {
-      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${esc(s.title)}"><div class="sec-h">${esc(s.title)}</div>`;
+      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${st}"><div class="sec-h">${st}</div>`;
       for (const x of s.subs)
-        h += `<div class="anchor" id="sec-${x.id}" data-title="${esc(s.title)} · ${esc(x.title)}"><div class="sub-h">${esc(x.title)}</div>${parasHTML(x.paras)}</div>`;
+        h += `<div class="anchor" id="sec-${x.id}" data-title="${st} · ${esc(L(x))}"><div class="sub-h">${esc(L(x))}</div>${parasHTML(x.paras)}</div>`;
       h += `</section>`;
     } else {
-      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${esc(s.title)}"><div class="sec-h">${esc(s.title)}</div>${parasHTML(s.paras)}</section>`;
+      h += `<section class="sec anchor" id="sec-${s.id}" data-title="${st}"><div class="sec-h">${st}</div>${parasHTML(s.paras, false, trans(s))}</section>`;
     }
   }
   h += `<div class="end-mark">✦ ✦ ✦</div>`;
@@ -135,17 +242,17 @@ function quickChips(bookId) {
   if (bookId === 'tehillim') {
     for (const s of book.sections) {
       if (s.letters) {
-        h += `<span class="chip-sep">${esc(s.group)}:</span>`;
-        for (const l of s.letters) h += `<button class="chip letter" data-go="${l.id}">${esc(l.title)}</button>`;
-      } else h += `<button class="chip" data-go="${s.id}">${esc(shortTitle(s.title))}</button>`;
+        h += `<span class="chip-sep">${esc(L(s, 'group'))}:</span>`;
+        for (const l of s.letters) h += `<button class="chip letter" data-go="${l.id}" lang="he">${esc(l.title)}</button>`;
+      } else h += `<button class="chip" data-go="${s.id}">${esc(shortTitle(L(s)))}</button>`;
     }
   } else {
     const want = ['ashrei', 'hk', 'a-avot', 'a-kedusha', 'a-shma', 'a-retzeh', 'a-modim', 'a-sim', 'a-netzor', 'ks', 'aleinu', 'ky2'];
-    const names = { 'a-avot': 'שמונה עשרה', 'a-netzor': 'אלהי נצור' };
+    const names = LANG === 'en' ? { 'a-avot': 'Shemoneh Esrei' } : { 'a-avot': 'שמונה עשרה', 'a-netzor': 'אלהי נצור' };
     const all = flatSections(book);
     for (const id of want) {
       const f = all.find(x => x.id === id); if (!f) continue;
-      h += `<button class="chip" data-go="${id}">${esc(names[id] || f.title)}</button>`;
+      h += `<button class="chip" data-go="${id}">${esc(names[id] || L(f.obj))}</button>`;
     }
   }
   return h;
@@ -159,29 +266,29 @@ function setBar(book, sec) {
 function viewHome() {
   current = { book: null, id: null };
   $('#btn-menu').hidden = false; $('#btn-home').hidden = true;
-  setBar('סידור הילולת רבי שלמה', '');
+  setBar(tr('appTitle'), '');
   const last = store.get('last', null);
   let lastLabel = '';
   if (last && BOOKS[last.book]) {
     const f = flatSections(BOOKS[last.book]).find(x => x.id === last.id);
-    if (f) lastLabel = `${BOOKS[last.book].title} · ${f.parent ? f.parent.title + ' · ' : ''}${f.title}`;
+    if (f) lastLabel = sectionLabel(BOOKS[last.book], f);
   }
   $('#main').innerHTML = `
     <div class="hero">
-      <div class="over">הַבּוֹחֵר בְּשִׁירֵי זִמְרָה</div>
-      <h1>סידור הילולת<br>רבי שלמה קרליבך</h1>
-      <div class="sub">תהלים · תפילת מנחה · שירי רבי שלמה</div>
+      <div class="over">${tr('heroOver')}</div>
+      <h1>${tr('heroTitle')}</h1>
+      <div class="sub">${tr('heroSub')}</div>
       <svg class="ornament" viewBox="0 0 140 12" aria-hidden="true"><path d="M0 6 Q 8.75 0 17.5 6 T 35 6 T 52.5 6 T 70 6 T 87.5 6 T 105 6 T 122.5 6 T 140 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
     </div>
     <div class="cards">
-      <a class="card" href="#/tehillim"><span class="ic">ת</span><span><h2>תהלים</h2><p>שבעה מזמורים · קי״ט באותיות שלמה ונשמה · הזכרת נשמות</p></span></a>
-      <a class="card" href="#/mincha"><span class="ic">מ</span><span><h2>תפילת מנחה</h2><p>אשרי · קדיש · שמונה עשרה עם השירים · עלינו</p></span></a>
-      <a class="card" href="#/songs"><span class="ic">♪</span><span><h2>השירים</h2><p>${Object.keys(DATA.songs).length} שירים של רבי שלמה, עם הסולם וקישור להאזנה</p></span></a>
-      <a class="card" href="#/aliyot"><span class="ic">ע</span><span><h2>עליות לקבר</h2><p>סרטונים מהעלייה לקבר בשנים קודמות, מתשס״ח ועד היום</p></span></a>
+      <a class="card" href="#/tehillim"><span class="ic" lang="he">ת</span><span><h2>${esc(L(BOOKS.tehillim))}</h2><p>${tr('cardTehillim')}</p></span></a>
+      <a class="card" href="#/mincha"><span class="ic" lang="he">מ</span><span><h2>${esc(L(BOOKS.mincha))}</h2><p>${tr('cardMincha')}</p></span></a>
+      <a class="card" href="#/songs"><span class="ic">♪</span><span><h2>${tr('songsTitle')}</h2><p>${tr('cardSongs')(Object.keys(DATA.songs).length)}</p></span></a>
+      <a class="card" href="#/aliyot"><span class="ic" lang="he">ע</span><span><h2>${tr('aliyotTitle')}</h2><p>${tr('cardAliyot')}</p></span></a>
     </div>
-    ${lastLabel ? `<button class="resume" id="resume">להמשיך מהמקום האחרון: ${esc(lastLabel)}</button>` : ''}
+    ${lastLabel ? `<button class="resume" id="resume">${tr('resume')}${esc(lastLabel)}</button>` : ''}
     <div class="install" id="install" hidden></div>
-    <p class="foot">הקטעים המסומנים בכחול הם שירי רבי שלמה – הקישו עליהם כדי לשמוע.<br>הסידור עובד גם בלי חיבור לאינטרנט.</p>`;
+    <p class="foot">${tr('foot')}</p>`;
   if (lastLabel) $('#resume').onclick = () => { location.hash = `#/${last.book}/${last.id}`; };
   showInstallHint();
   window.scrollTo(0, 0);
@@ -194,40 +301,43 @@ function viewBook(bookId, secId) {
     current.book = bookId;
     observeSections();
   }
-  setBar(book.title, '');
+  setBar(L(book), '');
   if (secId) goTo(secId, false);
   else window.scrollTo(0, 0);
 }
 function viewSongs() {
   current = { book: null, id: null };
   $('#btn-menu').hidden = false; $('#btn-home').hidden = false;
-  setBar('השירים', 'שירי רבי שלמה בתפילה');
+  setBar(tr('songsTitle'), tr('songsBar'));
   const where = songLocations();
   const order = Object.keys(where);
   for (const k of Object.keys(DATA.songs)) if (!order.includes(k)) order.push(k);
-  $('#main').innerHTML = `<h1 class="book-title">שירי רבי שלמה</h1>
-    <p class="book-intro">לפי סדר התפילה</p>
+  $('#main').innerHTML = `<h1 class="book-title">${tr('songsH1')}</h1>
+    <p class="book-intro">${tr('songsIntro')}</p>
     <ul class="songs-list">${order.map(k => {
       const s = DATA.songs[k], w = where[k];
-      return `<li><h3>${esc(s.title)} <span class="key">${esc(s.key)}</span></h3>
+      return `<li><h3>${esc(L(s))} <span class="key">${esc(s.key)}</span></h3>
         ${w ? `<div class="where">${esc(w.label)}</div>` : ''}
-        <p class="words">${esc(s.words)}</p>
-        <div class="actions">${ytButton(s)}${w ? `<a class="btn ghost" href="#/${w.book}/${w.id}">למקום בתפילה</a>` : ''}</div></li>`;
+        <p class="words" ${HE}>${esc(s.words)}</p>
+        <div class="actions">${ytButton(s)}${w ? `<a class="btn ghost" href="#/${w.book}/${w.id}">${tr('toPrayer')}</a>` : ''}</div></li>`;
     }).join('')}</ul>`;
   window.scrollTo(0, 0);
+}
+function sectionLabel(book, f) {
+  return `${L(book)} · ${f.parent ? L(f.parent) + ' · ' : ''}${L(f.obj)}`;
 }
 function viewAliyot() {
   current = { book: null, id: null };
   $('#btn-menu').hidden = false; $('#btn-home').hidden = false;
-  setBar('עליות לקבר', 'משנים קודמות');
+  setBar(tr('aliyotBar'), tr('aliyotBarSub'));
   const count = DATA.aliyot.reduce((n, y) => n + y.videos.length, 0);
-  $('#main').innerHTML = `<h1 class="book-title">עליות לקבר</h1>
-    <p class="book-intro">${count} סרטונים מהעלייה לקברו של רבי שלמה בהר המנוחות, לפי שנים</p>
-    ${navigator.onLine ? '' : '<p class="offline">אין כרגע חיבור לאינטרנט – כדי לצפות בסרטונים צריך חיבור.</p>'}
+  $('#main').innerHTML = `<h1 class="book-title">${tr('aliyotTitle')}</h1>
+    <p class="book-intro">${tr('aliyotIntro')(count)}</p>
+    ${navigator.onLine ? '' : `<p class="offline">${tr('aliyotOffline')}</p>`}
     <ul class="songs-list aliyot">${DATA.aliyot.map(y => `<li>
-      <h3>${esc(y.heb)} <span class="key">${y.greg}</span><span class="nth">היארצייט ה־${y.n}</span></h3>
+      <h3>${tr('yearHead')(y)}</h3>
       ${y.videos.map(v => `<a class="vid" href="https://youtu.be/${encodeURIComponent(v.yt)}${v.t ? `?t=${v.t}` : ''}" target="_blank" rel="noopener">${ICON_PLAY}
-        <span><b>${esc(v.title)}</b><small><bdi>${esc(v.by)}</bdi>${v.min ? ` · ${v.min} דק׳` : ''}</small></span></a>`).join('')}
+        <span><b>${esc(L(v))}</b><small><bdi>${esc(v.by)}</bdi>${v.min ? ` · ${tr('minutes')(v.min)}` : ''}</small></span></a>`).join('')}
     </li>`).join('')}</ul>`;
   window.scrollTo(0, 0);
 }
@@ -236,7 +346,7 @@ function songLocations() {
   for (const book of DATA.books) for (const f of flatSections(book)) {
     const o = f.obj; if (!o.paras) continue;
     for (const p of o.paras) for (const r of p.runs) for (const s of (r.songs || []))
-      if (!where[s]) where[s] = { book: book.id, id: f.id, label: `${book.title} · ${f.parent ? f.parent.title + ' · ' : ''}${f.title}` };
+      if (!where[s]) where[s] = { book: book.id, id: f.id, label: sectionLabel(book, f) };
   }
   return where;
 }
@@ -303,18 +413,18 @@ function openDrawer() {
   let h = '<div class="toc">';
   books.forEach((book, bi) => {
     if (bi) h += '<hr>';
-    h += `<div class="grp">${esc(book.title)}</div>`;
+    h += `<div class="grp">${esc(L(book))}</div>`;
     for (const s of book.sections) {
       if (s.letters) {
-        h += `<a href="#/${book.id}/${s.id}" class="${current.id === s.id ? 'on' : ''}">${esc(s.title)}</a><div class="letters">` +
-          s.letters.map(l => `<a href="#/${book.id}/${l.id}" class="${current.id === l.id ? 'on' : ''}" aria-label="${esc(s.group)} ${esc(l.title)}">${esc(l.title)}</a>`).join('') + '</div>';
+        h += `<a href="#/${book.id}/${s.id}" class="${current.id === s.id ? 'on' : ''}">${esc(L(s))}</a><div class="letters" ${HE}>` +
+          s.letters.map(l => `<a href="#/${book.id}/${l.id}" class="${current.id === l.id ? 'on' : ''}" aria-label="${esc(L(s, 'group'))} ${esc(L(l))}">${esc(l.title)}</a>`).join('') + '</div>';
       } else if (s.subs) {
-        h += `<a href="#/${book.id}/${s.subs[0].id}">${esc(s.title)}</a>` +
-          s.subs.map(x => `<a class="lvl2 ${current.id === x.id ? 'on' : ''}" href="#/${book.id}/${x.id}">${esc(x.title)}</a>`).join('');
-      } else h += `<a href="#/${book.id}/${s.id}" class="${current.id === s.id ? 'on' : ''}">${esc(s.title)}</a>`;
+        h += `<a href="#/${book.id}/${s.subs[0].id}">${esc(L(s))}</a>` +
+          s.subs.map(x => `<a class="lvl2 ${current.id === x.id ? 'on' : ''}" href="#/${book.id}/${x.id}">${esc(L(x))}</a>`).join('');
+      } else h += `<a href="#/${book.id}/${s.id}" class="${current.id === s.id ? 'on' : ''}">${esc(L(s))}</a>`;
     }
   });
-  h += '<hr><a href="#/songs">♪ כל השירים</a><a href="#/aliyot">עליות לקבר משנים קודמות</a><a href="#/">מסך הבית</a></div>';
+  h += `<hr><a href="#/songs">${tr('allSongs')}</a><a href="#/aliyot">${tr('aliyotLink')}</a><a href="#/">${tr('home')}</a></div>`;
   $('#drawer-body').innerHTML = h;
   $('#drawer').hidden = false; $('#scrim').hidden = false;
   const on = $('#drawer-body a.on'); if (on) on.scrollIntoView({ block: 'center' });
@@ -325,16 +435,16 @@ function closeAll() {
 
 /* ---------- songs sheet ---------- */
 function ytButton(s) {
-  return `<a class="btn yt" href="https://youtu.be/${encodeURIComponent(s.yt)}" target="_blank" rel="noopener">${ICON_PLAY}האזנה ביוטיוב</a>`;
+  return `<a class="btn yt" href="https://youtu.be/${encodeURIComponent(s.yt)}" target="_blank" rel="noopener">${ICON_PLAY}${tr('listenYt')}</a>`;
 }
 function openSongs(ids) {
   const off = !navigator.onLine;
   $('#songsheet').innerHTML = `<div class="sheet-grip"></div>` + ids.map(k => {
     const s = DATA.songs[k];
-    return `<div class="song-card"><h4>${esc(s.title)} <span class="key">${esc(s.key)}</span></h4>
-      <p class="words">${esc(s.words)}</p>${off ? '<p class="offline">אין כרגע חיבור לאינטרנט – כדי לשמוע את השיר צריך חיבור.</p>' : ''}
+    return `<div class="song-card"><h4>${esc(L(s))} <span class="key">${esc(s.key)}</span></h4>
+      <p class="words" ${HE}>${esc(s.words)}</p>${off ? `<p class="offline">${tr('songOffline')}</p>` : ''}
       <div class="actions">${ytButton(s)}</div></div>`;
-  }).join('') + `<button class="close-wide" data-close>סגירה</button>`;
+  }).join('') + `<button class="close-wide" data-close>${tr('close')}</button>`;
   $('#songsheet').hidden = false; $('#scrim').hidden = false;
 }
 
@@ -347,11 +457,11 @@ function showInstallHint() {
   if (standalone) { box.hidden = true; return; }
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   if (deferredPrompt) {
-    box.innerHTML = 'אפשר להתקין את הסידור כאפליקציה בטלפון, והוא יעבוד גם בלי אינטרנט.<br><button id="do-install">התקנה</button>';
+    box.innerHTML = `${tr('installAndroid')}<br><button id="do-install">${tr('install')}</button>`;
     box.hidden = false;
     $('#do-install').onclick = async () => { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; box.hidden = true; };
   } else if (ios) {
-    box.innerHTML = 'להתקנה באייפון: בספארי הקישו על כפתור השיתוף <b>⎋</b> ובחרו <b>„הוסף למסך הבית”</b>. אחרי ההתקנה הסידור עובד גם בלי אינטרנט.';
+    box.innerHTML = tr('installIos');
     box.hidden = false;
   }
 }
@@ -406,18 +516,19 @@ function bind() {
   $('#wake').checked = store.get('wake', false);
   $('#wake').onchange = e => setWake(e.target.checked);
   window.addEventListener('hashchange', route);
-  window.addEventListener('online', () => toast('יש חיבור לאינטרנט'));
-  window.addEventListener('offline', () => toast('אין חיבור – הסידור ממשיך לעבוד, השירים יחכו לחיבור'));
+  window.addEventListener('online', () => toast(tr('online')));
+  window.addEventListener('offline', () => toast(tr('offline')));
 }
 
 /* ---------- boot ---------- */
 applyFont(store.get('fs', Math.round(Math.min(24, Math.max(19, window.innerWidth / 19)))));
-applyTheme(store.get('theme', 'auto'));
+applyLang(LANG);
+$('#btn-lang').onclick = switchLang;
 fetch('content.json').then(r => r.json()).then(d => {
   DATA = d; for (const b of d.books) BOOKS[b.id] = b;
   bind(); route();
   if (store.get('wake', false)) setWake(true);
-}).catch(() => { $('#main').innerHTML = '<p class="foot">לא הצלחנו לטעון את הסידור. נסו לרענן.</p>'; });
+}).catch(() => { $('#main').innerHTML = `<p class="foot">${tr('loadError')}</p>`; });
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -426,8 +537,8 @@ if ('serviceWorker' in navigator) {
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw && nw.addEventListener('statechange', () => {
-          if (nw.state === 'installed' && hadController) toast('גרסה חדשה של הסידור הותקנה – היא תיטען בפתיחה הבאה', 4500);
-          if (nw.state === 'activated' && !hadController) toast('הסידור נשמר במכשיר ויעבוד גם בלי אינטרנט', 4000);
+          if (nw.state === 'installed' && hadController) toast(tr('updated'), 4500);
+          if (nw.state === 'activated' && !hadController) toast(tr('saved'), 4000);
         });
       });
     }).catch(() => {});
